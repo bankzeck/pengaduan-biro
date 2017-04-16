@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">pengaduan_biro</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="bagian" view="colnames">
+<left>0</left>
+<top>436</top>
+<width>123</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `bagian` (
+  `kd_bagian` varchar(10) NOT NULL,
+  `nama_bagian` varchar(50) DEFAULT NULL,
+  `kd_pic` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`kd_bagian`),
+  KEY `bagian_ibfk_1` (`kd_pic`),
+  CONSTRAINT `bagian_ibfk_1` FOREIGN KEY (`kd_pic`) REFERENCES `pic` (`kd_pic`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="biro" view="colnames">
+<left>460</left>
+<top>4</top>
+<width>103</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `biro` (
+  `kd_biro` varchar(10) NOT NULL,
+  `biro` varchar(500) DEFAULT NULL,
+  `alamat` varchar(500) DEFAULT NULL,
+  `username` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`kd_biro`),
+  KEY `username` (`username`),
+  CONSTRAINT `biro_ibfk_1` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="pengaduan" view="colnames">
+<left>160</left>
+<top>47</top>
+<width>162</width>
+<height>443</height>
+<sql_create_table>CREATE TABLE `pengaduan` (
+  `kd_pengaduan` int(10) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) DEFAULT NULL,
+  `judul_permasalahan` varchar(500) DEFAULT NULL,
+  `deskripsi` varchar(1000) DEFAULT NULL,
+  `tanggal_pengajuan` date DEFAULT NULL,
+  `status` enum('Solved','UnSolved') DEFAULT NULL,
+  `kd_bagian` varchar(10) DEFAULT NULL,
+  `acc_pic` enum('accept','reject') DEFAULT NULL,
+  `note_pic` varchar(500) DEFAULT NULL,
+  `tanggapan` varchar(1000) DEFAULT NULL,
+  `tanggal_solved` date DEFAULT NULL,
+  `time_solving` int(11) DEFAULT NULL,
+  `acc_kabiro` enum('accept','reject') DEFAULT NULL,
+  `note_kabiro` varchar(500) DEFAULT NULL,
+  `solved_by` enum('teknisi','pic') DEFAULT NULL,
+  PRIMARY KEY (`kd_pengaduan`),
+  KEY `username` (`username`),
+  KEY `kd_bagian` (`kd_bagian`),
+  CONSTRAINT `pengaduan_ibfk_1` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `pengaduan_ibfk_2` FOREIGN KEY (`kd_bagian`) REFERENCES `bagian` (`kd_bagian`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="pic" view="colnames">
+<left>530</left>
+<top>360</top>
+<width>103</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `pic` (
+  `kd_pic` varchar(10) NOT NULL,
+  `nama_pic` varchar(50) DEFAULT NULL,
+  `username` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`kd_pic`),
+  KEY `username` (`username`),
+  CONSTRAINT `pic_ibfk_1` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="user" view="colnames">
+<left>686</left>
+<top>127</top>
+<width>139</width>
+<height>265</height>
+<sql_create_table>CREATE TABLE `user` (
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `level` enum('administrator','teknisi','user','pic','kabiro') DEFAULT NULL,
+  `nama` varchar(255) DEFAULT NULL,
+  `email` varchar(500) DEFAULT NULL,
+  `no_telp` varchar(100) DEFAULT NULL,
+  `status_akun` enum('Approved','Pending') DEFAULT NULL,
+  `kd_biro` varchar(10) DEFAULT NULL,
+  `tanggal_register` date DEFAULT NULL,
+  `foto` varchar(100) DEFAULT NULL,
+  `kd_bagian` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`username`),
+  KEY `kd_biro` (`kd_biro`),
+  KEY `kd_bagian` (`kd_bagian`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`kd_biro`) REFERENCES `biro` (`kd_biro`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
